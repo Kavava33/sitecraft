@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SiteCraft — сайт без сложностей</title>
+<style>
+:root{--bg:#09090b;--panel:#111114;--panel2:#17171b;--text:#f7f7f8;--muted:#a1a1aa;--line:#27272a;--accent:#8b5cf6;--accent2:#a78bfa;--ok:#34d399}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:15px Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button{font:inherit}a{text-decoration:none;color:inherit}
+.container{width:min(1080px,92%);margin:auto}
+nav{height:68px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.logo{font-weight:850;font-size:21px;letter-spacing:-.7px}.logo span{color:var(--accent2)}
+.nav-actions{display:flex;gap:10px}.btn{border:1px solid var(--line);background:#fff;color:#09090b;border-radius:10px;padding:10px 15px;font-weight:750;cursor:pointer}.btn.dark{background:#151518;color:#fff}.btn.primary{background:var(--accent);border-color:var(--accent);color:white}.btn:hover{filter:brightness(1.08)}
+.hero{text-align:center;padding:78px 0 50px}.eyebrow{display:inline-flex;gap:7px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:7px 11px;color:#c4c4ca;font-size:12px;background:#101014}.dot{width:6px;height:6px;background:var(--ok);border-radius:50%}
+h1{font-size:clamp(45px,7vw,76px);line-height:.98;letter-spacing:-4px;max-width:800px;margin:22px auto 18px}.grad{background:linear-gradient(100deg,#fff,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{max-width:590px;margin:auto;color:var(--muted);font-size:17px;line-height:1.55}.hero-actions{display:flex;justify-content:center;gap:10px;margin-top:26px;flex-wrap:wrap}.small{font-size:12px;color:#71717a;margin-top:11px}
+.demo{margin:28px auto 0;border:1px solid var(--line);border-radius:18px;background:#0e0e11;overflow:hidden;box-shadow:0 25px 80px #0008}.demo-top{height:36px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:0 12px}.circle{width:7px;height:7px;border-radius:50%;background:#3f3f46}.demo-body{display:grid;grid-template-columns:155px 1fr;min-height:360px}.demo-side{padding:18px;border-right:1px solid var(--line);color:#71717a}.demo-side b{color:#fff;display:block;margin-bottom:16px}.demo-side div{padding:9px 10px;border-radius:8px;font-size:12px}.demo-side div.active{background:#19151f;color:#fff}.demo-canvas{padding:28px}.fake-site{height:100%;min-height:304px;border:1px solid var(--line);border-radius:13px;padding:35px;display:flex;align-items:center;background:radial-gradient(circle at 80% 20%,#8b5cf622,transparent 28%),linear-gradient(135deg,#17171c,#0d0d10)}.fake-site h2{font-size:38px;letter-spacing:-2px;margin:0 0 10px}.fake-site p{color:#8b8b95;max-width:430px;line-height:1.5;margin:0 0 18px}.fake-site button{border:0;background:#fff;border-radius:8px;padding:9px 13px;font-weight:750}
+.section{padding:55px 0}.section h2{text-align:center;font-size:35px;letter-spacing:-1.8px;margin:0 0 9px}.section>p{text-align:center;color:var(--muted);margin:0 auto;max-width:570px;line-height:1.5}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}.card{border:1px solid var(--line);border-radius:15px;background:#101013;padding:20px}.card h3{margin:0 0 7px;font-size:17px}.card p{margin:0;color:#909099;font-size:13px;line-height:1.5}.num{color:#71717a;font-size:12px;margin-bottom:18px}
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}.type{border:1px solid var(--line);border-radius:14px;background:#101013;padding:18px;cursor:pointer;text-align:left;color:#fff}.type:hover{border-color:#52525b}.type small{display:block;color:#8b8b95;margin-top:5px}
+.price{max-width:500px;margin:28px auto 0;border:1px solid #3a2b61;border-radius:16px;background:linear-gradient(145deg,#14111d,#101013);padding:25px;text-align:center}.price strong{font-size:40px}.price p{color:#9b9ba5;margin:5px 0 18px}.price ul{list-style:none;padding:0;margin:0 0 20px;color:#b4b4bc;line-height:2}
+footer{border-top:1px solid var(--line);padding:30px 0;color:#71717a;font-size:12px;display:flex;justify-content:space-between}
+
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modal.open{display:flex}.modal-box{width:min(760px,100%);max-height:90vh;overflow:auto;background:#111114;border:1px solid #303038;border-radius:18px;box-shadow:0 30px 100px #000;position:relative}.modal-head{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-head h3{margin:0;font-size:20px}.close{border:0;background:#1b1b20;color:#aaa;width:34px;height:34px;border-radius:9px;cursor:pointer}.modal-content{padding:22px}.choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.choice{border:1px solid var(--line);background:#151519;border-radius:13px;padding:16px;text-align:left;color:white;cursor:pointer}.choice:hover,.choice.selected{border-color:#8b5cf6;background:#191521}.choice b{display:block}.choice span{display:block;color:#8e8e98;font-size:12px;margin-top:4px}.modal-foot{padding:16px 22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.step{color:#85858f;font-size:12px}.hidden{display:none}
+.notice{padding:12px 14px;border:1px solid #2f2f35;border-radius:10px;background:#151518;color:#bcbcc4;font-size:13px;line-height:1.45;margin-bottom:14px}.notice b{color:#fff}
+.builder{position:fixed;inset:0;background:#09090b;z-index:30;display:none;grid-template-rows:60px 1fr}.builder.open{display:grid}.builder-top{border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 16px}.builder-title{font-weight:800}.builder-main{display:grid;grid-template-columns:210px 1fr 220px;min-height:0}.builder-left,.builder-right{border-right:1px solid var(--line);padding:15px;overflow:auto}.builder-right{border-right:0;border-left:1px solid var(--line)}.tool{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#121216;color:#ddd;border-radius:9px;padding:11px;margin-bottom:8px;cursor:pointer}.tool:hover{border-color:#555}.canvas-wrap{padding:22px;overflow:auto}.site-canvas{width:min(900px,100%);min-height:650px;margin:auto;background:#fff;color:#171717;border-radius:12px;overflow:hidden;box-shadow:0 20px 70px #0008}.site-nav{padding:18px 24px;display:flex;justify-content:space-between;border-bottom:1px solid #eee}.site-hero{padding:80px 45px;background:linear-gradient(135deg,#f5f3ff,#fff);min-height:330px}.site-hero h1{color:#171717;letter-spacing:-2px;font-size:50px;margin:0 0 12px}.site-hero p{color:#666;max-width:520px;line-height:1.55}.site-hero button{border:0;background:#111;color:#fff;padding:11px 15px;border-radius:8px}.builder-right label{display:block;color:#8e8e98;font-size:12px;margin:0 0 6px}.builder-right input{width:100%;background:#151518;border:1px solid var(--line);color:white;border-radius:8px;padding:10px;margin-bottom:13px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#fff;color:#09090b;padding:12px 16px;border-radius:10px;box-shadow:0 15px 50px #0008;font-weight:750;z-index:50;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:800px){
+.nav-actions .dark{display:none}.hero{padding-top:55px}.demo-body{grid-template-columns:1fr}.demo-side{display:none}.demo-canvas{padding:13px}.fake-site{padding:25px}.fake-site h2{font-size:30px}.cards,.types{grid-template-columns:1fr}
+.builder-main{grid-template-columns:1fr;overflow:auto}.builder-left,.builder-right{display:block;border:0;border-bottom:1px solid var(--line);padding:12px}.builder-right{border-top:1px solid var(--line);border-bottom:0}.builder-left{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.builder-left .builder-label{width:100%;margin-bottom:0}.builder-left .tool{width:auto;margin:0;padding:9px 10px}.builder-hint{width:100%;margin:5px 0 0}.canvas-wrap{padding:12px;order:2}.builder-left{order:1}.builder-right{order:3}.site-hero{padding:55px 25px}.site-hero h1{font-size:38px}footer{gap:10px;flex-direction:column}
+}
+
+.stepper{font-size:11px;color:#777;display:flex;gap:5px;align-items:center}.stepper .current{background:#8b5cf6;color:#fff;border-radius:999px;padding:4px 7px}.builder-label{font-size:11px;color:#777;margin-bottom:10px;letter-spacing:.5px}.tool.active{border-color:#8b5cf6;background:#191521}.builder-hint,.builder-small{color:#777;font-size:11px;line-height:1.5;margin-top:18px}.canvas-tip{text-align:center;color:#777;font-size:11px;margin-top:10px}.editable{cursor:pointer;border:1px dashed transparent;padding:3px}.editable:hover,.selected-edit{border-color:#b8a1ff!important}.editable-btn{cursor:pointer}.full{width:100%;margin-top:6px}
+.publish-modal{display:none}.publish-modal.open{display:flex}
+</style>
+</head>
+<body>
+<nav><div class="container" style="display:flex;align-items:center;justify-content:space-between;width:100%"><div class="logo">Site<span>Craft</span></div><div class="nav-actions"><button class="btn dark" onclick="openRegister()">Регистрация</button><button class="btn dark" onclick="openPricing()">Цены</button><button class="btn primary" onclick="startCreation()">Создать сайт</button></div></div></nav>
+
+<header class="hero">
+<div class="container">
+<div class="eyebrow"><span class="dot"></span> Первый сайт — бесплатно</div>
+<h1>Сайт можно сделать <span class="grad">проще.</span></h1>
+<p>Выбери готовый шаблон, поменяй текст и фото — и опубликуй. Без кода и без длинной настройки.</p>
+<div class="hero-actions"><button class="btn primary" onclick="startCreation()">Создать первый сайт</button><button class="btn dark" onclick="openPricing()">Посмотреть цену</button></div>
+<div class="small">Без регистрации · Без карты · Первый сайт бесплатно</div>
+
+<div class="demo">
+<div class="demo-top"><i class="circle"></i><i class="circle"></i><i class="circle"></i></div>
+<div class="demo-body"><div class="demo-side"><b>Твой сайт</b><div class="active">Главная</div><div>О нас</div><div>Контакты</div></div><div class="demo-canvas"><div class="fake-site"><div><h2>Твой сайт уже здесь.</h2><p>Измени этот текст, добавь своё фото и нажми «Опубликовать».</p><button onclick="startCreation()">Попробовать</button></div></div></div></div>
+</div>
+</div>
+</header>
+
+<section class="section">
+<div class="container"><h2>Как это работает</h2><p>Никаких курсов и инструкций на 30 страниц.</p>
+<div class="cards">
+<div class="card"><div class="num">01</div><h3>Выбери шаблон</h3><p>Для бизнеса, портфолио, услуг, магазина и других задач.</p></div>
+<div class="card"><div class="num">02</div><h3>Измени своё</h3><p>Текст, фото и кнопку можно поменять прямо в редакторе.</p></div>
+<div class="card"><div class="num">03</div><h3>Опубликуй</h3><p>Нажми одну кнопку — и сайт готов к просмотру.</p></div>
+</div></div>
+</section>
+
+<section class="section">
+<div class="container"><h2>Что хочешь создать?</h2><p>Выбери один вариант — мы покажем подходящие шаблоны.</p>
+<div class="types">
+<button class="type" onclick="chooseType('Лендинг')"><b>Лендинг</b><small>Один сильный экран для продукта или услуги</small></button>
+<button class="type" onclick="chooseType('Бизнес')"><b>Бизнес</b><small>Компания, студия, агентство</small></button>
+<button class="type" onclick="chooseType('Портфолио')"><b>Портфолио</b><small>Покажи работы и расскажи о себе</small></button>
+<button class="type" onclick="chooseType('Магазин')"><b>Магазин</b><small>Товары, цены и контакты</small></button>
+<button class="type" onclick="chooseType('Услуги')"><b>Услуги</b><small>Салон, мастер, специалист</small></button>
+<button class="type" onclick="chooseType('Другое')"><b>Другое</b><small>Начни с чистого шаблона</small></button>
+</div></div>
+</section>
+
+<section class="section" id="pricing"><div class="container"><h2>Просто и недорого</h2><p>Попробуй первый сайт без регистрации. Если захочешь больше — решишь потом.</p>
+<div class="price"><div style="color:#a78bfa;font-weight:800">PRO</div><strong>9 €</strong><span style="color:#888"> / месяц</span><p>Для тех, кому нужно больше одного проекта.</p><ul><li>✓ Несколько сайтов</li><li>✓ Свой домен</li><li>✓ Больше возможностей</li><li>✓ Без ограничений на количество проектов</li></ul><button class="btn primary" onclick="showToast('Подписка будет доступна после запуска оплаты')">Выбрать Pro</button></div>
+</div></section>
+
+<footer><div>© 2026 SiteCraft</div><div>Сайт без сложностей.</div></footer>
+
+<div class="modal" id="modal"><div class="modal-box">
+<div class="modal-head"><h3 id="modalTitle">Создай первый сайт</h3><button class="close" onclick="closeModal()">×</button></div>
+<div class="modal-content">
+<div id="step1"><div class="notice"><b>Первый сайт бесплатно.</b> Регистрация не нужна.</div><div class="choice-grid">
+<button class="choice" onclick="selectType(this,'Лендинг')"><b>Лендинг</b><span>Продукт, акция или услуга</span></button>
+<button class="choice" onclick="selectType(this,'Бизнес')"><b>Бизнес</b><span>Компания или студия</span></button>
+<button class="choice" onclick="selectType(this,'Портфолио')"><b>Портфолио</b><span>Работы и проекты</span></button>
+<button class="choice" onclick="selectType(this,'Магазин')"><b>Магазин</b><span>Товары и цены</span></button>
+</div></div>
+<div id="step2" class="hidden"><div class="notice"><b id="chosenText">Лендинг.</b> Выбери готовый стиль.</div><div class="choice-grid">
+<button class="choice" onclick="selectTemplate(this,'Nova')"><b>Nova</b><span>Чистый и современный</span></button>
+<button class="choice" onclick="selectTemplate(this,'Mono')"><b>Mono</b><span>Минималистичный</span></button>
+<button class="choice" onclick="selectTemplate(this,'Pulse')"><b>Pulse</b><span>Яркий и динамичный</span></button>
+<button class="choice" onclick="selectTemplate(this,'Simple')"><b>Simple</b><span>Максимально простой</span></button>
+</div></div>
+</div>
+<div class="modal-foot"><span class="step" id="stepLabel">Шаг 1 из 2</span><button class="btn primary" id="nextBtn" onclick="nextStep()" disabled>Продолжить</button></div>
+</div></div>
+
+
+<div class="modal" id="registerModal"><div class="modal-box" style="max-width:430px">
+<div class="modal-head"><h3>Создать аккаунт</h3><button class="close" onclick="closeRegister()">×</button></div>
+<div class="modal-content">
+<div class="notice"><b>Второй сайт бесплатно.</b> Зарегистрируйся — карта не нужна.</div>
+<label style="display:block;color:#8e8e98;font-size:12px;margin:0 0 6px">Имя</label>
+<input id="regName" placeholder="Как тебя зовут?" style="width:100%;background:#151518;border:1px solid var(--line);color:white;border-radius:8px;padding:11px;margin-bottom:12px">
+<label style="display:block;color:#8e8e98;font-size:12px;margin:0 0 6px">Email</label>
+<input id="regEmail" type="email" placeholder="you@example.com" style="width:100%;background:#151518;border:1px solid var(--line);color:white;border-radius:8px;padding:11px;margin-bottom:12px">
+<label style="display:block;color:#8e8e98;font-size:12px;margin:0 0 6px">Пароль</label>
+<input id="regPassword" type="password" placeholder="Минимум 6 символов" style="width:100%;background:#151518;border:1px solid var(--line);color:white;border-radius:8px;padding:11px">
+</div>
+<div class="modal-foot"><span class="step">Бесплатно</span><button class="btn primary" onclick="register()">Создать аккаунт</button></div>
+</div></div>
+
+
+<div class="builder" id="builder">
+<div class="builder-top">
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="btn dark" onclick="closeBuilder()">←</button>
+    <div><div class="builder-title">Создание сайта</div><div style="font-size:10px;color:#777;margin-top:2px" id="builderTemplate"></div></div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <div class="stepper"><span class="current">1</span><span>Редактирование</span><span>→</span><span>2</span><span>Публикация</span></div>
+    <button class="btn dark" onclick="saveSite()">Сохранить</button>
+    <button class="btn primary" onclick="publishSite()">Опубликовать</button>
+  </div>
+</div>
+<div class="builder-main">
+<aside class="builder-left">
+  <div class="builder-label">ТВОЙ САЙТ</div>
+  <button class="tool active" onclick="selectEdit('title')">✏️ Заголовок</button>
+  <button class="tool" onclick="selectEdit('text')">📝 Текст</button>
+  <button class="tool" onclick="selectEdit('button')">🔘 Кнопка</button>
+  <button class="tool" onclick="showToast('Фото можно будет добавить здесь')">🖼️ Фото</button>
+  <div class="builder-hint">💡 Нажми на элемент в центре — его можно изменить справа.</div>
+</aside>
+<main class="canvas-wrap">
+  <div class="site-canvas" id="siteCanvas">
+    <div class="site-nav"><b id="siteLogo">Твоя компания</b><span style="color:#777">Главная · Контакты</span></div>
+    <section class="site-hero">
+      <div class="editable selected-edit" id="siteTitle" onclick="selectEdit('title')">Сделай свой сайт</div>
+      <p class="editable" id="siteText" onclick="selectEdit('text')">Расскажи здесь о себе, компании или услуге. Этот текст можно заменить за несколько секунд.</p>
+      <button class="editable-btn" id="siteButton" onclick="selectEdit('button')">Узнать больше</button>
+    </section>
+  </div>
+  <div class="canvas-tip">Нажми на текст или кнопку, чтобы изменить её</div>
+</main>
+<aside class="builder-right">
+  <div class="builder-label">РЕДАКТИРОВАНИЕ</div>
+  <div id="editTitlePanel">
+    <label>Заголовок</label>
+    <input id="editTitle" value="Сделай свой сайт" oninput="syncTitle()">
+    <button class="btn primary full" onclick="finishEdit()">Готово</button>
+  </div>
+  <div id="editTextPanel" class="hidden">
+    <label>Текст</label>
+    <textarea id="editText" oninput="syncText()" style="width:100%;height:120px;background:#151518;border:1px solid var(--line);color:white;border-radius:8px;padding:10px;resize:vertical">Расскажи здесь о себе, компании или услуге. Этот текст можно заменить за несколько секунд.</textarea>
+    <button class="btn primary full" onclick="finishEdit()">Готово</button>
+  </div>
+  <div id="editButtonPanel" class="hidden">
+    <label>Текст кнопки</label>
+    <input id="editButton" value="Узнать больше" oninput="syncButton()">
+    <label>Ссылка</label>
+    <input id="editLink" placeholder="https://..." oninput="window.__siteLink=this.value">
+    <button class="btn primary full" onclick="finishEdit()">Готово</button>
+  </div>
+  <div class="builder-small">Можно менять только нужное. Остальные настройки спрятаны, чтобы не перегружать тебя.</div>
+</aside>
+</div>
+</div>
+
+<div class="publish-modal modal" id="publishModal"><div class="modal-box" style="max-width:520px">
+<div class="modal-head"><h3>🎉 Твой сайт готов</h3><button class="close" onclick="closePublish()">×</button></div>
+<div class="modal-content">
+<div class="notice"><b>Сайт опубликован.</b> Скопируй ссылку или открой её прямо сейчас.</div>
+<div style="background:#151518;border:1px solid var(--line);border-radius:10px;padding:13px;color:#d4d4d8;font-size:13px" id="publishedUrl">https://sitecraft.app/my-site</div>
+</div>
+<div class="modal-foot"><button class="btn dark" onclick="copyPublished()">Скопировать</button><button class="btn primary" onclick="openPublished()">Открыть сайт</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+let type='',template='',step=1;
+const $=id=>document.getElementById(id);
+
+function openRegister(){ $('registerModal').classList.add('open'); }
+function closeRegister(){ $('registerModal').classList.remove('open'); }
+function register(){
+  const name=$('regName').value.trim(), email=$('regEmail').value.trim(), password=$('regPassword').value;
+  if(!name || !email || password.length<6){showToast('Заполни имя, email и пароль (от 6 символов)');return}
+  localStorage.setItem('sitecraft_user',JSON.stringify({name,email}));
+  closeRegister();
+  showToast('Аккаунт создан — теперь можно делать второй сайт');
+}
+
+
+let currentEdit='title';
+function selectEdit(which){
+  currentEdit=which;
+  ['title','text','button'].forEach(x=>{
+    const p=$('edit'+x.charAt(0).toUpperCase()+x.slice(1)+'Panel');
+    if(p)p.classList.toggle('hidden',x!==which);
+  });
+  document.querySelectorAll('.editable,.editable-btn').forEach(x=>x.classList.remove('selected-edit'));
+  const target=which==='title'?'siteTitle':which==='text'?'siteText':'siteButton';
+  $(target).classList.add('selected-edit');
+}
+function finishEdit(){showToast('Изменения применены');}
+function closePublish(){$('publishModal').classList.remove('open')}
+function copyPublished(){
+  const url=$('publishedUrl').textContent;
+  if(navigator.clipboard) navigator.clipboard.writeText(url);
+  showToast('Ссылка скопирована');
+}
+function openPublished(){showToast('Открытие публичной страницы — демо')}
+
+function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove('show'),2200)}
+function openModal(){ $('modal').classList.add('open'); }
+function closeModal(){ $('modal').classList.remove('open'); }
+function startCreation(){ 
+  const used=+localStorage.getItem('sitecraft_sites')||0;
+  if(used>=2){ showToast('Для нового сайта нужен Pro'); openPricing(); return; }
+  if(used>=1 && !localStorage.getItem('sitecraft_user')){ openRegister(); showToast('Для второго сайта сначала создай аккаунт'); return; }
+  currentSiteSaved=false;
+  step=1;type='';template='';$('step1').classList.remove('hidden');$('step2').classList.add('hidden');$('nextBtn').disabled=true;$('nextBtn').textContent='Продолжить';$('stepLabel').textContent='Шаг 1 из 2';openModal();
+}
+function chooseType(t){startCreation();selectType(null,t)}
+function selectType(el,t){document.querySelectorAll('#step1 .choice').forEach(x=>x.classList.remove('selected'));if(el)el.classList.add('selected');type=t;$('nextBtn').disabled=false}
+function nextStep(){if(step===1&&type){step=2;$('step1').classList.add('hidden');$('step2').classList.remove('hidden');$('chosenText').textContent=type+'.';$('stepLabel').textContent='Шаг 2 из 2';$('nextBtn').textContent='Создать сайт';$('nextBtn').disabled=true;return}if(step===2&&template){closeModal();openBuilder();}}
+function selectTemplate(el,t){document.querySelectorAll('#step2 .choice').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');template=t;$('nextBtn').disabled=false}
+function openBuilder(){
+  $('builderTemplate').textContent=template;
+  $('editTitle').value='Сделай свой сайт';
+  $('editText').value='Расскажи здесь о себе, компании или услуге. Этот текст можно заменить за несколько секунд.';
+  $('editButton').value='Узнать больше';
+  syncTitle(); syncText(); syncButton(); selectEdit('title');
+  $('builder').classList.add('open');
+  showToast('Редактор открыт — можешь начать');
+}
+function closeBuilder(){ $('builder').classList.remove('open'); }
+function editHero(){ $('editTitle').focus();showToast('Редактирование текста');}
+function syncTitle(){ $('siteTitle').textContent=$('editTitle').value||'Сделай свой сайт';}
+function syncText(){ $('siteText').textContent=$('editText').value||'Поменяй этот текст на свой.';}
+function syncButton(){ $('siteButton').textContent=$('editButton').value||'Начать';}
+let currentSiteSaved=false;
+function saveSite(){
+  if(!currentSiteSaved){
+    const used=+localStorage.getItem('sitecraft_sites')||0;
+    localStorage.setItem('sitecraft_sites', used+1);
+    currentSiteSaved=true;
+  }
+  showToast('Сайт сохранён');
+}
+function publishSite(){
+  saveSite();
+  const slug=(type||'site').toLowerCase().replace(/[^a-zа-я0-9]+/gi,'-')+'-'+Date.now().toString().slice(-5);
+  $('publishedUrl').textContent='https://sitecraft.app/'+slug;
+  $('publishModal').classList.add('open');
+  showToast('Сайт опубликован');
+}
+function openPricing(){document.querySelector('#pricing').scrollIntoView({behavior:'smooth'});}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeRegister();closeBuilder()}});
+</script>
+</body>
+</html>
