@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SiteCraft — конструктор</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial;background:#f5f6fa;color:#15171b}button,input,textarea,select{font:inherit}
+header{height:62px;background:#fff;border-bottom:1px solid #e5e6eb;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:20}
+.logo{font-size:22px;font-weight:900}.logo b{color:#7057ff}.head-actions{display:flex;gap:8px}.btn{border:0;border-radius:9px;padding:10px 15px;cursor:pointer;font-weight:700}.primary{background:#7057ff;color:#fff}.light{background:#fff;border:1px solid #ddd}
+.page{display:none}.page.active{display:block}.dash{padding:30px 5%}.dashhead{display:flex;justify-content:space-between;align-items:center}.projects{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:25px}.project{background:white;border:1px solid #e4e5ea;border-radius:15px;overflow:hidden}.thumb{height:145px;padding:20px;color:white;font-size:25px;font-weight:800;background:linear-gradient(135deg,#7057ff,#aa9cff)}.pbody{padding:18px}.muted{color:#737782;font-size:13px}
+.editor{height:calc(100vh - 62px);display:grid;grid-template-columns:320px 1fr;overflow:hidden}.tools{background:#111319;color:white;padding:20px;overflow:auto}.tools h3{margin-top:0}.tools label{display:block;color:#aeb2bd;font-size:12px;margin:17px 0 6px}.tools input,.tools textarea,.tools select{width:100%;padding:10px;border:1px solid #30343d;border-radius:8px;background:#1b1e25;color:#fff}.tools textarea{min-height:80px;resize:vertical}.preview{padding:22px;overflow:auto}.frame{max-width:1100px;min-height:calc(100vh - 105px);margin:auto;background:white;border-radius:15px;box-shadow:0 15px 50px #0002;overflow:hidden}.site nav{padding:20px 7%;display:flex;justify-content:space-between;border-bottom:1px solid #eee}.site nav strong{font-size:20px}.site nav span{margin-left:20px;color:#666;font-size:14px}.hero{padding:85px 8%;display:grid;grid-template-columns:1.1fr .9fr;gap:45px;align-items:center}.hero h1{font-size:clamp(38px,5vw,68px);line-height:1;margin:0 0 18px}.hero p{font-size:18px;color:#686b75;line-height:1.6}.cta{display:inline-block;color:#fff;text-decoration:none;padding:13px 20px;border-radius:9px;font-weight:700;margin-top:10px}.hero img{width:100%;height:320px;object-fit:cover;border-radius:20px}.blocks{padding:60px 8%;text-align:center}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{text-align:left;border:1px solid #eee;border-radius:14px;padding:22px}.footer{padding:30px;text-align:center;background:#111;color:#aaa}.status{font-size:12px;color:#777;margin-top:10px}
+@media(max-width:800px){.projects{grid-template-columns:1fr}.editor{grid-template-columns:1fr;height:auto}.tools{height:auto}.preview{min-height:700px}.hero{grid-template-columns:1fr}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="logo">Site<b>Craft</b></div><div class="head-actions"><button class="btn light" onclick="dashboard()">Мои сайты</button><button class="btn primary" onclick="newSite()">+ Создать сайт</button></div></header>
+
+<section id="dashboard" class="page active">
+<div class="dash"><div class="dashhead"><div><h1>Мои сайты</h1><div class="muted">Управляй своими проектами</div></div><button class="btn primary" onclick="newSite()">+ Новый сайт</button></div>
+<div class="projects">
+<div class="project"><div class="thumb">Nova Studio</div><div class="pbody"><b>Nova Studio</b><p class="muted">Сохранён только что</p><button class="btn primary" onclick="editSite()">Редактировать</button></div></div>
+<div class="project"><div class="thumb" style="background:linear-gradient(135deg,#20242d,#555e70)">Мой бизнес</div><div class="pbody"><b>Мой бизнес</b><p class="muted">Опубликован</p><button class="btn primary" onclick="editSite()">Редактировать</button></div></div>
+</div></div></section>
+
+<section id="editor" class="page">
+<div class="editor">
+<aside class="tools">
+<h3>Редактор сайта</h3>
+<label>Название</label><input id="title" value="Nova Studio">
+<label>Заголовок</label><input id="headline" value="Создай что-то прекрасное">
+<label>Описание</label><textarea id="desc">Современный сайт для твоего проекта, бизнеса или портфолио.</textarea>
+<label>Кнопка</label><input id="button" value="Начать">
+<label>Цвет</label><input id="accent" type="color" value="#7057ff">
+<label>Изображение (URL)</label><input id="image" placeholder="https://...">
+<label>Стиль</label><select id="style"><option value="studio">Creative</option><option value="business">Business</option><option value="portfolio">Portfolio</option></select>
+<button class="btn primary" style="width:100%;margin-top:20px" onclick="save()">💾 Сохранить</button>
+<button class="btn light" style="width:100%;margin-top:8px" onclick="publish()">🚀 Опубликовать</button>
+<div id="status" class="status">Изменения не сохранены</div>
+</aside>
+<main class="preview"><div class="frame"><div id="site" class="site"></div></div></main>
+</div></section>
+
+<script>
+const fields=["title","headline","desc","button","accent","image","style"];
+fields.forEach(x=>document.getElementById(x).addEventListener("input",render));
+let saved={};
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function render(){
+let t=title.value,h=headline.value,d=desc.value,b=button.value,a=accent.value,img=image.value||"https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80";
+let cards=style.value==="business"?["Больше клиентов","Профессиональный вид","Простое управление"]:style.value==="portfolio"?["Проект №1","Проект №2","Проект №3"]:["Современный дизайн","Быстрый запуск","Всё под твоим контролем"];
+site.innerHTML=`<nav><strong>${esc(t)}</strong><div><span>Главная</span><span>О нас</span><span>Контакты</span></div></nav><section class="hero"><div><h1>${esc(h)}</h1><p>${esc(d)}</p><a class="cta" style="background:${a}" href="#">${esc(b)}</a></div><img src="${esc(img)}" onerror="this.style.display='none'"></section><section class="blocks"><h2>${style.value==="portfolio"?"Мои работы":"Почему выбирают нас"}</h2><div class="cards">${cards.map(c=>`<div class="card"><h3>${c}</h3><p class="muted">Добавь сюда информацию о своём проекте.</p></div>`).join("")}</div></section><footer class="footer">© 2026 ${esc(t)} · Сделано в SiteCraft</footer>`;
+}
+function save(){saved={title:title.value,headline:headline.value,desc:desc.value,button:button.value,accent:accent.value,image:image.value,style:style.value};localStorage.setItem("sitecraft",JSON.stringify(saved));status.textContent="✓ Сохранено локально"}
+function load(){try{let x=JSON.parse(localStorage.getItem("sitecraft"));if(!x)return;Object.keys(x).forEach(k=>{if(document.getElementById(k))document.getElementById(k).value=x[k]})}catch(e){}}
+function publish(){save();alert("Демо: сайт сохранён. В настоящей версии здесь создастся публичный адрес, например mysite.sitecraft.com.");}
+function dashboard(){document.getElementById("editor").classList.remove("active");document.getElementById("dashboard").classList.add("active")}
+function editSite(){document.getElementById("dashboard").classList.remove("active");document.getElementById("editor").classList.add("active");load();render()}
+function newSite(){document.getElementById("dashboard").classList.remove("active");document.getElementById("editor").classList.add("active");title.value="Мой новый сайт";headline.value="Добро пожаловать";desc.value="Расскажи здесь о своём бизнесе или проекте.";button.value="Узнать больше";render()}
+load();render();
+</script>
+</body></html>
