@@ -31,10 +31,12 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:#71717a;font-size:1
 
 .stepper{font-size:11px;color:#777;display:flex;gap:5px;align-items:center}.stepper .current{background:#8b5cf6;color:#fff;border-radius:999px;padding:4px 7px}.builder-label{font-size:11px;color:#777;margin-bottom:10px;letter-spacing:.5px}.tool.active{border-color:#8b5cf6;background:#191521}.builder-hint,.builder-small{color:#777;font-size:11px;line-height:1.5;margin-top:18px}.canvas-tip{text-align:center;color:#777;font-size:11px;margin-top:10px}.editable{cursor:pointer;border:1px dashed transparent;padding:3px}.editable:hover,.selected-edit{border-color:#b8a1ff!important}.editable-btn{cursor:pointer}.full{width:100%;margin-top:6px}
 .publish-modal{display:none}.publish-modal.open{display:flex}
+
+.account-box{padding:14px;border:1px solid var(--line);border-radius:14px;background:#fafafa;display:grid;gap:8px;margin:16px 0}.account-box b{font-weight:700}
 </style>
 </head>
 <body>
-<nav><div class="container" style="display:flex;align-items:center;justify-content:space-between;width:100%"><div class="logo">Site<span>Craft</span></div><div class="nav-actions"><button class="btn dark" onclick="openRegister()">Регистрация</button><button class="btn dark" onclick="openPricing()">Цены</button><button class="btn primary" onclick="startCreation()">Создать сайт</button></div></div></nav>
+<nav><div class="container" style="display:flex;align-items:center;justify-content:space-between;width:100%"><div class="logo">Site<span>Craft</span></div><div class="nav-actions"><button class="btn secondary" id="accountBtn" onclick="openAccount()">Аккаунт</button><button class="btn dark" onclick="openRegister()">Регистрация</button><button class="btn dark" onclick="openPricing()">Цены</button><button class="btn primary" onclick="startCreation()">Создать сайт</button></div></div></nav>
 
 <header class="hero">
 <div class="container">
@@ -218,7 +220,7 @@ function openModal(){ $('modal').classList.add('open'); }
 function closeModal(){ $('modal').classList.remove('open'); }
 function startCreation(){ 
   const used=+localStorage.getItem('sitecraft_sites')||0;
-  if(used>=2){ showToast('Для нового сайта нужен Pro'); openPricing(); return; }
+  if(used>=2 && !isPro()){ showToast('Для нового сайта нужен Pro'); openPricing(); return; }
   if(used>=1 && !localStorage.getItem('sitecraft_user')){ openRegister(); showToast('Для второго сайта сначала создай аккаунт'); return; }
   currentSiteSaved=false;
   step=1;type='';template='';$('step1').classList.remove('hidden');$('step2').classList.add('hidden');$('nextBtn').disabled=true;$('nextBtn').textContent='Продолжить';$('stepLabel').textContent='Шаг 1 из 2';openModal();
@@ -259,6 +261,48 @@ function publishSite(){
 }
 function openPricing(){document.querySelector('#pricing').scrollIntoView({behavior:'smooth'});}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeRegister();closeBuilder()}});
+</script>
+
+<script>
+function getUser(){ try{return JSON.parse(localStorage.getItem('sitecraft_user')||'null')}catch(e){return null} }
+function isPro(){ return localStorage.getItem('sitecraft_pro')==='1' }
+function openRegister(){ closeModal('accountModal'); document.getElementById('registerModal').classList.add('open'); }
+function registerAccount(){
+  const name=(document.getElementById('regName').value||'').trim();
+  const email=(document.getElementById('regEmail').value||'').trim();
+  const password=document.getElementById('regPassword').value||'';
+  const msg=document.getElementById('regMessage');
+  if(!name||!email||password.length<6){msg.textContent='Заполни все поля. Пароль — минимум 6 символов.';return;}
+  localStorage.setItem('sitecraft_user',JSON.stringify({name,email}));
+  msg.textContent='Аккаунт создан ✓';
+  setTimeout(()=>{closeModal('registerModal'); updateAccountUI(); showToast('Аккаунт создан — второй сайт доступен');},500);
+}
+function openAccount(){
+  const u=getUser();
+  if(!u){openRegister();return;}
+  document.getElementById('accountTitle').textContent='Мой аккаунт';
+  document.getElementById('accountInfo').textContent='Привет, '+u.name+'!';
+  document.getElementById('accountStatus').textContent=isPro()?'Pro':'Бесплатный';
+  document.getElementById('accountSites').textContent=localStorage.getItem('sitecraft_sites')||'0';
+  document.getElementById('accountModal').classList.add('open');
+}
+function activateTestPro(){
+  localStorage.setItem('sitecraft_pro','1');
+  closeModal('accountModal'); closeModal('registerModal');
+  updateAccountUI(); showToast('Pro включён для теста');
+}
+function resetTestAccount(){
+  localStorage.removeItem('sitecraft_user');
+  localStorage.removeItem('sitecraft_pro');
+  localStorage.removeItem('sitecraft_sites');
+  currentSiteSaved=false;
+  closeModal('accountModal'); updateAccountUI(); showToast('Тестовый аккаунт сброшен');
+}
+function updateAccountUI(){
+  const u=getUser(), b=document.getElementById('accountBtn');
+  if(b) b.textContent=u ? (isPro()?'Pro аккаунт':'Аккаунт') : 'Войти / регистрация';
+}
+document.addEventListener('DOMContentLoaded',updateAccountUI);
 </script>
 </body>
 </html>
